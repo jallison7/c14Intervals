@@ -4,8 +4,15 @@ central_int <- function(radiocarbon_age, error, interval_prob = .95,
                         curve = curve)
   tail_prob <- (1 - interval_prob) / 2
 
-  central_interval <- data.frame(matrix(nrow = 1, ncol = 6))
-  colnames(central_interval) <-  c("start", "AD_BC_start", "end", "AD_BC_end", "length", "probability")
+  central_interval <- data.frame(matrix(nrow = 1, ncol = 11))
+  colnames(central_interval) <-  c("radiocarbon_age", "error", "nominal_prob", "type", "start",
+                                   "AD_BC_start", "end", "AD_BC_end", "length", "total_range",
+                                   "probability")
+
+  central_interval$radiocarbon_age <- radiocarbon_age
+  central_interval$error <- error
+  central_interval$nominal_prob <- interval_prob
+  central_interval$type <- "central"
 
   i <- 1
   while (calibrated_distribution$cumul_probability[i] <= tail_prob) {
@@ -44,6 +51,8 @@ central_int <- function(radiocarbon_age, error, interval_prob = .95,
 
   central_interval$probability <- calibrated_distribution$cumul_probability[j + 1] -
                                 calibrated_distribution$cumul_probability[i - 1]
+
+  central_interval$total_range <- central_interval$length
 
   return(central_interval)
 

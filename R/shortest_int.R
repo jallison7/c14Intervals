@@ -37,8 +37,10 @@ shortest_int <- function(radiocarbon_age, error, interval_prob = .95, algorithm 
 
 
   # create a data frame to hold the segments of the interval and their associated probability
-  interval_segments <- data.frame(matrix(nrow = count_segments, ncol = 6))
-  colnames(interval_segments) <- c("start", "AD_BC_start", "end", "AD_BC_end", "length", "probability")
+  interval_segments <- data.frame(matrix(nrow = count_segments, ncol = 11))
+  colnames(interval_segments) <- c("radiocarbon_age", "error", "nominal_prob", "type", "start",
+                                   "AD_BC_start", "end", "AD_BC_end", "length", "total_range",
+                                   "probability")
 
   p <- in_interval$prob[1]
   segment <- 1
@@ -83,6 +85,29 @@ shortest_int <- function(radiocarbon_age, error, interval_prob = .95, algorithm 
   }
 
 
+  interval_segments$type <- paste("one of", count_segments, "segment(s) of shortest")
+
+  #creates a line of data for the total, combined, interval segments
+  sum_row <- data.frame(matrix(nrow = 1, ncol = 11))
+  colnames(sum_row) <-  c("radiocarbon_age", "error", "nominal_prob", "type", "start",
+                          "AD_BC_start", "end", "AD_BC_end", "length", "total_range",
+                          "probability")
+
+
+  sum_row$length <- sum(interval_segments$length)
+  sum_row$probability <- sum(interval_segments$probability)
+  sum_row$type <- "total shortest"
+  sum_row$start <- interval_segments$start[1]
+  sum_row$AD_BC_start <- interval_segments$AD_BC_start[1]
+  sum_row$end <- interval_segments$end[nrow(interval_segments)]
+  sum_row$AD_BC_end <- interval_segments$AD_BC_end[nrow(interval_segments)]
+
+
+  interval_segments <- rbind(interval_segments, sum_row)
+
+  interval_segments$radiocarbon_age <- radiocarbon_age
+  interval_segments$error <- error
+  interval_segments$nominal_prob <- interval_prob
 
 
 
