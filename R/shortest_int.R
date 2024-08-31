@@ -85,7 +85,7 @@ shortest_int <- function(radiocarbon_age, error, interval_prob = .95, algorithm 
   }
 
 
-  interval_segments$type <- paste("one of", count_segments, "segment(s) of shortest")
+  interval_segments$type <- ("segment of shortest")
 
   #creates a line of data for the total, combined, interval segments
   sum_row <- data.frame(matrix(nrow = 1, ncol = 11))

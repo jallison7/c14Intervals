@@ -12,7 +12,7 @@ get_point_estimates <- function(radiocarbon_age, error, interval_prob = .95, alg
 
 
 
-  continuous <- filter(intervals, type == "continuous")
+  continuous <- filter(intervals, type == "shortest continuous")
   point_estimates$interval_probability[1] <- interval_prob
   point_estimates$type[1] <- "midpoint of shortest continuous interval"
   if (continuous$AD_BC_start == continuous$AD_BC_end) {
